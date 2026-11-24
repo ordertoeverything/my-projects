@@ -15,7 +15,7 @@ Inside a project there are two buttons:
 - 💬 **Chats:** the chats that go with this project, newest first.
   - **Named for this project** are chats with the project's name in the title.
   - **Also worked in this folder** are chats that opened or changed files in the project's folder.
-  - Click a chat to see the date, your last message, and Claude's last reply.  Use **Open chat** to jump into it, or **Copy title** to paste it into your sidebar search.  After a jump, a **Back to** button above the message box takes you back to the chat you came from.
+  - Click a chat to see the date, your last message, and Claude's last reply.  Use **Open chat** to jump into it, or **Copy title** to paste it into your sidebar search.  To go back to the chat you were in, click the **‹** arrow at the top left of the Claude app.
 - 📁 **Files:** the files and folders inside the project.  Click a folder to go into it.  Click a file to preview it, then **Open** it or **Show in Finder**.
 
 Press **Refresh** any time to pick up new chats and folders.

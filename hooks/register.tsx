@@ -281,35 +281,11 @@ async function openOnMac($: EngineInterface, args: string[], what: string) {
   if (!r || r.exitCode !== 0) await $.ui.toast('Could not open ' + what)
 }
 
-// ---- Jumping between chats, with a way back ----
-const JUMP_KEY = 'last-jump-1'
-const JUMP_MAX_AGE = 12 * 60 * 60 * 1000 // the way back is offered for 12 hours
-type Jump = { from: string; fromTitle: string; to: string; at: number }
-
+// Opens a saved chat in the Claude desktop app. Its own ‹ arrow (top left) takes you back.
 const chatLink = (id: string) => `claude://resume?session=${encodeURIComponent(id)}`
 
 async function jumpTo($: EngineInterface, to: string) {
-  const from = await Promise.resolve($.session.id()).catch(() => '')
-  if (from && from !== to) {
-    const fromTitle = index[from]?.title ?? 'the chat you were in'
-    const jump: Jump = { from, fromTitle, to, at: Number(await $.clock.now()) }
-    await $.store.set(JUMP_KEY, jump).catch(() => undefined)
-  }
   await openOnMac($, [chatLink(to)], 'the chat')
-}
-
-/** The chat to go back to, when this chat is the one the last jump landed in. */
-async function wayBack($: EngineInterface): Promise<Jump | null> {
-  const jump = (await $.store.get(JUMP_KEY).catch(() => undefined)) as Jump | undefined
-  if (!jump) return null
-  const me = await Promise.resolve($.session.id()).catch(() => '')
-  const now = Number(await $.clock.now())
-  return jump.to === me && now - jump.at < JUMP_MAX_AGE ? jump : null
-}
-
-async function goBack($: EngineInterface, jump: Jump) {
-  await $.store.delete(JUMP_KEY).catch(() => undefined)
-  await openOnMac($, [chatLink(jump.from)], 'the chat')
 }
 
 async function openPane($: EngineInterface) {
@@ -337,29 +313,6 @@ export const register: Register = (on, options) => {
   on('command.run', { command: 'projects' }, async $ => {
     await openPane($)
     return { text: 'My Projects opened.' }
-  })
-
-  // A row above the message box in the chat you jumped to: one click takes you back.
-  on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    if (e.props.hasSurvey) return next(e)
-    const jump = await wayBack($)
-    if (!jump) return next(e)
-    const { Box, Button, Text } = $.ui.resolve(e)
-    return (
-      <Box gap={1} alignItems="center">
-        <Button key="mp-back" label={'◂  Back to ' + clip(jump.fromTitle, 50)} onPress={() => void goBack($, jump)} />
-        <Button
-          key="mp-back-hide"
-          plain
-          label="Hide"
-          onPress={async () => {
-            await $.store.delete(JUMP_KEY).catch(() => undefined)
-            $.ui.invalidate('ui.render')
-          }}
-        />
-        <Text dimColor>from My Projects</Text>
-      </Box>
-    )
   })
 
   on('ui.render', { component: 'Pane', requestId: PANE }, async ($, e) => {
@@ -425,14 +378,6 @@ export const register: Register = (on, options) => {
         await $.ui.toast('My Projects refreshed')
       }))
 
-      const jump = await wayBack($)
-      const backBand = jump ? (
-        <Box flexDirection="column">
-          {pill('pane-back', '◂  Back to ' + clip(jump.fromTitle, 40), go(() => goBack($, jump)), '#3A6FF0')}
-          {gap()}
-        </Box>
-      ) : null
-
       const status =
         progress.total > 0 && progress.done < progress.total ? (
           <Text dimColor>
@@ -444,7 +389,6 @@ export const register: Register = (on, options) => {
       if (project === null) {
         return (
           <Box flexDirection="column">
-            {backBand}
             <Box justifyContent="space-between" alignItems="center">
               <Text dimColor>Click a project to open it</Text>
               {refresh}
@@ -491,7 +435,6 @@ export const register: Register = (on, options) => {
       // ---- The top of every project screen ----
       const top = (
         <Box flexDirection="column">
-          {backBand}
           <Box justifyContent="space-between" alignItems="center">
             {pill('back', '◂  All projects', go(async () => {
               await update($, projectAtom, () => null)
