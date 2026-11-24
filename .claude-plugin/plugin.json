@@ -1,0 +1,28 @@
+{
+  "name": "my-projects",
+  "version": "0.3.0",
+  "description": "My Projects: a pane beside your Claude Code chat. Pick a project folder and see its files and the chats that belong to it.",
+  "author": { "name": "Order to Everything, LLC (The Orderly Entrepreneur)" },
+  "license": "PolyForm-Shield-1.0.0",
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "projectsFolder": {
+      "type": "string",
+      "title": "Projects folder",
+      "description": "The folder inside your main Claude folder that holds your projects. Leave blank: it uses a folder named Projects if you have one, otherwise every folder in your main folder.",
+      "default": ""
+    },
+    "extraFolders": {
+      "type": "string",
+      "title": "Extra project folders",
+      "description": "Other folders in your main folder that should also show as projects, separated by commas. Example: Admin, Inbox",
+      "default": ""
+    },
+    "titleCodes": {
+      "type": "string",
+      "title": "Chat title codes",
+      "description": "Optional. A chat already counts for a project when its title has the project's folder name. Add short codes here, like: Tech and Systems = TECH; Website = WEB, Homepage",
+      "default": ""
+    }
+  }
+}

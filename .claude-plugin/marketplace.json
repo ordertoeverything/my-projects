@@ -1,0 +1,13 @@
+{
+  "name": "the-orderly-entrepreneur-projects",
+  "description": "My Projects, a Claude Code mod from The Orderly Entrepreneur.",
+  "owner": {
+    "name": "Melynda Weiland, The Orderly Entrepreneur"
+  },
+  "plugins": [
+    {
+      "name": "my-projects",
+      "source": "./"
+    }
+  ]
+}
