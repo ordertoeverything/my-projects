@@ -482,7 +482,7 @@ export const register: Register = (on, options) => {
                     <Text>{c.lastReply || 'Not found'}</Text>
                     {gap()}
                     <Box gap={1}>
-                      {pill('open-chat', 'Open chat', go(() => openOnMac($, [`claude://code/continue?session=${encodeURIComponent(c.id)}`], 'the chat')), color)}
+                      {pill('open-chat', 'Open chat', go(() => openOnMac($, [`claude://resume?session=${encodeURIComponent(c.id)}`], 'the chat')), color)}
                       {pill('copy-title', 'Copy title', go(async () => {
                         const r = await $.ui.copy({ text: c.title, surface: e.surface }).catch(() => ({ isCopied: false }))
                         let isCopied = r.isCopied

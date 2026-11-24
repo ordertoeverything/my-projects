@@ -70,7 +70,7 @@ The only other things it does happen when you click: open a file or a chat, show
 
 ## Good to know
 
-- If **Open chat** doesn't jump to the chat, use **Copy title** and paste it into your Claude sidebar search.
+- **Open chat** works in the Claude desktop app.  Anywhere else, use **Copy title** and paste it into your sidebar search.
 - It only sees chats you started from your main folder.
 
 ## License
