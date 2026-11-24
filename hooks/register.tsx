@@ -331,7 +331,13 @@ export const register: Register = (on, options) => {
       // An outlined, plain button like "Collapse all" in Everything in This Chat.
       const pill = (key: string, label: string, onPress: () => void, color = GRAY) => (
         <Box key={'pill-box-' + key} borderStyle="round" borderColor={color} paddingX={1}>
-          <Button key={key} plain label={label} onPress={onPress} />
+          {color === GRAY ? (
+            <Button key={key} plain label={label} onPress={onPress} />
+          ) : (
+            <Button key={key} plain label={label} onPress={onPress}>
+              <Text color={color}>{label}</Text>
+            </Button>
+          )}
         </Box>
       )
 
@@ -475,7 +481,18 @@ export const register: Register = (on, options) => {
                     </Text>
                     <Text>{c.lastReply || 'Not found'}</Text>
                     {gap()}
-                    <Text dimColor>To open this chat, search its title in your sidebar.</Text>
+                    <Box gap={1}>
+                      {pill('open-chat', 'Open chat', go(() => openOnMac($, [`claude://code/continue?session=${encodeURIComponent(c.id)}`], 'the chat')), color)}
+                      {pill('copy-title', 'Copy title', go(async () => {
+                        const r = await $.ui.copy({ text: c.title, surface: e.surface }).catch(() => ({ isCopied: false }))
+                        let isCopied = r.isCopied
+                        if (!isCopied) {
+                          const p = await $.process.run(['pbcopy'], { stdin: c.title }).catch(() => null)
+                          isCopied = p?.exitCode === 0
+                        }
+                        await $.ui.toast(isCopied ? 'Title copied. Paste it in your sidebar search.' : 'Could not copy the title.')
+                      }))}
+                    </Box>
                   </Box>
                 ))
               : <Text dimColor>That chat is gone.</Text>}
@@ -526,14 +543,6 @@ export const register: Register = (on, options) => {
         const where = folder ? folder.replace(/^.*\//, '') : project
         const body = (
           <Box flexDirection="column">
-            {folder !== '' && (
-              <Box key="up-row">
-                <Button key="up" plain onPress={go(() => update($, folderAtom, f => f.replace(/\/?[^/]*$/, '')))}>
-                  <Text color={color}>◂ </Text>
-                  Up one folder
-                </Button>
-              </Box>
-            )}
             {dirs.slice(0, MAX_ROWS).map(d => (
               <Box key={'dr-' + d.name}>
                 <Button
@@ -573,6 +582,17 @@ export const register: Register = (on, options) => {
         return (
           <Box flexDirection="column">
             {top}
+            {folder !== '' && (
+              <Box flexDirection="column">
+                {pill(
+                  'up',
+                  '◂  Up to ' + clip(folder.includes('/') ? folder.replace(/\/[^/]*$/, '').replace(/^.*\//, '') : project, 30),
+                  go(() => update($, folderAtom, f => f.replace(/\/?[^/]*$/, ''))),
+                  color,
+                )}
+                {gap()}
+              </Box>
+            )}
             {card('files', color, 'folder', clip(where, 40), plural(files.length, 'file'), body)}
           </Box>
         )

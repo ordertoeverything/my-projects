@@ -15,7 +15,7 @@ Inside a project there are two buttons:
 - 💬 **Chats:** the chats that go with this project, newest first.
   - **Named for this project** are chats with the project's name in the title.
   - **Also worked in this folder** are chats that opened or changed files in the project's folder.
-  - Click a chat to see the date, your last message, and Claude's last reply.
+  - Click a chat to see the date, your last message, and Claude's last reply.  Use **Open chat** to jump into it, or **Copy title** to paste it into your sidebar search.
 - 📁 **Files:** the files and folders inside the project.  Click a folder to go into it.  Click a file to preview it, then **Open** it or **Show in Finder**.
 
 Press **Refresh** any time to pick up new chats and folders.
@@ -66,11 +66,11 @@ It sends nothing anywhere.  It reads your project folders and the chats Claude C
 
 It keeps one small list of your chat titles and dates so it doesn't have to reread every chat each time.  That list lives in Claude Code's own settings folder on your computer.
 
-The only other thing it does is open a file or show it in Finder when you click.
+The only other things it does happen when you click: open a file or a chat, show a file in Finder, or copy a chat title.
 
 ## Good to know
 
-- It can't jump straight into an old chat yet.  To open one, search its title in your Claude sidebar.
+- If **Open chat** doesn't jump to the chat, use **Copy title** and paste it into your Claude sidebar search.
 - It only sees chats you started from your main folder.
 
 ## License

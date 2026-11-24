@@ -1,6 +1,6 @@
 {
   "name": "my-projects",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "My Projects: a pane beside your Claude Code chat. Pick a project folder and see its files and the chats that belong to it.",
   "author": { "name": "Order to Everything, LLC (The Orderly Entrepreneur)" },
   "license": "PolyForm-Shield-1.0.0",
